@@ -1,0 +1,1293 @@
+{
+  "info": {
+    "_postman_id": "6341f93d-5c37-4b76-afc7-73a9032fbf8e",
+    "name": "Productboard v2",
+    "description": "Live-proved Productboard v2 collection. Use configuration endpoints first for any entity-type work because field schemas vary by workspace and teamspace/product context.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{productboard_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Entities",
+      "item": [
+        {
+          "name": "Search Entities By Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/search",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "search"
+              ]
+            },
+            "description": "Live-verified. `POST /v2/entities/search` works with wrapped `{\"data\":{\"type\":\"...\"}}` and returns disjoint `feature` vs `subfeature` buckets on this tenant.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"{{entity_type}}\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "List Entities By Type[]",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities?type[]={{entity_type}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type[]",
+                  "value": "{{entity_type}}"
+                }
+              ]
+            },
+            "description": "Live-verified. Use repeated or array-style `type[]` query params. Scalar `type=feature` returned `400 invalidJson` on the tested tenant."
+          }
+        },
+        {
+          "name": "List Entities By Type[] And Fields[]",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities?type[]={{entity_type}}&fields[]={{entity_field}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type[]",
+                  "value": "{{entity_type}}"
+                },
+                {
+                  "key": "fields[]",
+                  "value": "{{entity_field}}"
+                }
+              ]
+            },
+            "description": "Live-verified. `fields[]` is accepted; scalar `fields=id` was rejected. Useful for lightweight export/header discovery flows."
+          }
+        },
+        {
+          "name": "Get Entity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}"
+              ]
+            },
+            "description": "Live-verified against entity ids returned from list/search responses."
+          }
+        },
+        {
+          "name": "Get Entity Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 against a sandbox feature."
+          }
+        },
+        {
+          "name": "List Company Entities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities?type[]=company&fields[]=id&fields[]=name",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type[]",
+                  "value": "company"
+                },
+                {
+                  "key": "fields[]",
+                  "value": "id"
+                },
+                {
+                  "key": "fields[]",
+                  "value": "name"
+                }
+              ]
+            },
+            "description": "Live-proved on 2026-03-06. `company` is a valid v2 entity type in list mode, even though guessed standalone `/v2/companies` routes returned `404` and remain excluded."
+          }
+        },
+        {
+          "name": "Get Company Entity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}?fields[]=name",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}"
+              ],
+              "query": [
+                {
+                  "key": "fields[]",
+                  "value": "name"
+                }
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 against a real `company` entity id."
+          }
+        },
+        {
+          "name": "Get Company Entity Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 against a real `company` entity id."
+          }
+        },
+        {
+          "name": "List User Entities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities?type[]=user&fields[]=id&fields[]=name",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type[]",
+                  "value": "user"
+                },
+                {
+                  "key": "fields[]",
+                  "value": "id"
+                },
+                {
+                  "key": "fields[]",
+                  "value": "name"
+                }
+              ]
+            },
+            "description": "Live-proved on 2026-03-06. `user` is a valid v2 entity type in list mode. It is distinct from workspace `members`."
+          }
+        },
+        {
+          "name": "Get User Entity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}?fields[]=name",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}"
+              ],
+              "query": [
+                {
+                  "key": "fields[]",
+                  "value": "name"
+                }
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 against a real `user` entity id. This route is about customer/user entities, not workspace members."
+          }
+        },
+        {
+          "name": "Get User Entity Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 against a real `user` entity id."
+          }
+        },
+        {
+          "name": "List Entity Configurations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/configurations",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "configurations"
+              ]
+            },
+            "description": "Live-verified. Fetch this before documenting fields or generating CSV headers."
+          }
+        },
+        {
+          "name": "Get Entity Configuration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/configurations/{{entity_type}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "configurations",
+                "{{entity_type}}"
+              ]
+            },
+            "description": "Live-verified. This endpoint is the authoritative source for available fields, requiredness, lifecycle operations, and field value schema for the current workspace/teamspace context."
+          }
+        },
+        {
+          "name": "Create Entity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities"
+              ]
+            },
+            "description": "Live-verified for `product`, `component`, `feature`, and `subfeature`. Minimal safe example uses `product`. On this tenant, `component`, `feature`, and `subfeature` creation required a parent relationship in the create payload.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"product\",\n    \"fields\": {\n      \"name\": \"{{probe_prefix}} product\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Patch Entity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}"
+              ]
+            },
+            "description": "Live-verified for product/component/feature/subfeature. Use configuration endpoints first to confirm field lifecycle and required constraints.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"description\": \"<p>{{probe_prefix}} updated entity</p>\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Entity",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}"
+              ]
+            },
+            "description": "Live-verified. Requires `entities:delete`; `entities:write` alone was insufficient."
+          }
+        },
+        {
+          "name": "Create Entity Relationship",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 for dependency-style relationships between sibling features. Successful types included `isBlockedBy` and `isBlocking`; `link` between features was rejected by business rules.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"{{relationship_type}}\",\n    \"target\": {\n      \"id\": \"{{relationship_target_id}}\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Set Entity Parent",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships/parent",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships",
+                "parent"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06. PUT succeeded with `data.target.id` when reasserting a valid component parent on a sandbox feature.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"target\": {\n      \"id\": \"{{target_id}}\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Entity Relationship",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/entities/{{entity_id}}/relationships/{{relationship_type}}/{{relationship_target_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "entities",
+                "{{entity_id}}",
+                "relationships",
+                "{{relationship_type}}",
+                "{{relationship_target_id}}"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 for deleting `isBlockedBy` and `isBlocking` relationships between sibling features. Deleting required parents still fails by business rule."
+          }
+        }
+      ],
+      "description": "Configuration-first v2 entity workflow. Live proof on 2026-03-06 confirmed that `/v2/entities` accepts array-style query params (`type[]`, `fields[]`), scalar `type` fails, and child types such as component/feature/subfeature require a parent relationship at create time on this tenant."
+    },
+    {
+      "name": "Members",
+      "description": "Members routes are live-proved with Productboard API-token auth. The same routes returned `403 access.unknown_scope` when called with the `pbproof` OAuth access token.",
+      "item": [
+        {
+          "name": "List Members",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/members",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "members"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` for `members:read`, so this route is currently API-token-verified rather than OAuth-verified."
+          }
+        },
+        {
+          "name": "Get Member",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/members/{{member_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "members",
+                "{{member_id}}"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+          }
+        },
+        {
+          "name": "Get Member Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/members/{{member_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "members",
+                "{{member_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "description": "Analytics routes are separate from members. `member-activities` is live-proved with Productboard API-token auth; OAuth bearer tokens from `pbproof` returned `403 Missing required scope analytics:read`.",
+      "item": [
+        {
+          "name": "List Member Activities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/analytics/member-activities?page[limit]=50",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "analytics",
+                "member-activities"
+              ],
+              "query": [
+                {
+                  "key": "page[limit]",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Live-proved with Productboard API-token auth on 2026-03-06. The documented route is `/v2/analytics/member-activities`, not `/v2/members/{id}/activity`. The same route returned `403 Missing required scope analytics:read` with the `pbproof` OAuth token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notes",
+      "item": [
+        {
+          "name": "List Notes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes?page[limit]=50",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes"
+              ],
+              "query": [
+                {
+                  "key": "page[limit]",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Live-verified. `page[limit]` is accepted here; note pagination differs from `/v2/entities`."
+          }
+        },
+        {
+          "name": "Search Notes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/search",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "search"
+              ]
+            },
+            "description": "Live-verified. Useful when you need filtered notes instead of raw pagination.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"simple\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Note",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "Get Note Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "List Note Configurations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/configurations",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "configurations"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "Get Note Configuration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/configurations/{{note_config_type}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "configurations",
+                "{{note_config_type}}"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 for `simple`. Use this before assuming note-type fields."
+          }
+        },
+        {
+          "name": "Create Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            },
+            "description": "Live-verified for type `simple`.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"simple\",\n    \"fields\": {\n      \"name\": \"{{probe_prefix}} note\",\n      \"content\": \"{{probe_prefix}} note body\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Patch Note",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}"
+              ]
+            },
+            "description": "Live-verified.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"content\": \"{{probe_prefix}} updated note body\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Note",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}"
+              ]
+            },
+            "description": "Live-verified. Requires `notes:delete`; `notes:write` alone was insufficient."
+          }
+        },
+        {
+          "name": "Create Note Link Relationship",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-verified. The working payload is `data.type=link` with `data.target.type=link`; Productboard resolves the response target to the concrete entity type (for example `feature`).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"link\",\n    \"target\": {\n      \"id\": \"{{target_id}}\",\n      \"type\": \"link\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Set Note Customer Relationship",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}/relationships/customer",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}",
+                "relationships",
+                "customer"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 for a disposable `user` target. The accepted shape required `data.target.id` and `data.target.type`. Company-target behavior remains unresolved.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"target\": {\n      \"id\": \"{{customer_id}}\",\n      \"type\": \"{{customer_type}}\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Note Relationship",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}/relationships/link/{{target_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}",
+                "relationships",
+                "link",
+                "{{target_id}}"
+              ]
+            },
+            "description": "Live-verified for note-to-entity link deletion."
+          }
+        },
+        {
+          "name": "Delete Note Customer Relationship",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/notes/{{note_id}}/relationships/customer/{{customer_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "notes",
+                "{{note_id}}",
+                "relationships",
+                "customer",
+                "{{customer_id}}"
+              ]
+            },
+            "description": "Live-proved on 2026-03-06 for a disposable `user` target after setting the customer relationship via `PUT /relationships/customer`."
+          }
+        }
+      ],
+      "description": "Live-proved notes routes with corrected relationship payloads. Note deletion required `notes:delete`; `notes:write` alone was insufficient."
+    },
+    {
+      "name": "Integrations And Teams",
+      "item": [
+        {
+          "name": "List Jira Integrations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/jira-integrations",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "jira-integrations"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "Get Jira Integration",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/jira-integrations/{{jira_integration_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "jira-integrations",
+                "{{jira_integration_id}}"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "List Jira Integration Connections",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/jira-integrations/{{jira_integration_id}}/connections",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "jira-integrations",
+                "{{jira_integration_id}}",
+                "connections"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "Get Jira Integration Connection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/jira-integrations/{{jira_integration_id}}/connections/{{jira_connection_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "jira-integrations",
+                "{{jira_integration_id}}",
+                "connections",
+                "{{jira_connection_id}}"
+              ]
+            },
+            "description": "Live-verified."
+          }
+        },
+        {
+          "name": "List Teams",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams?page[limit]=50",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams"
+              ],
+              "query": [
+                {
+                  "key": "page[limit]",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` for `teams:read`, so this route is currently API-token-verified rather than OAuth-verified."
+          }
+        },
+        {
+          "name": "Get Team",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams/{{team_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams",
+                "{{team_id}}"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+          }
+        },
+        {
+          "name": "Get Team Relationships",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams/{{team_id}}/relationships",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams",
+                "{{team_id}}",
+                "relationships"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+          }
+        },
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Minimal valid create body required `data.fields.name` and `data.fields.handle`. OAuth access tokens from `pbproof` were not accepted for the route family.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"name\": \"{{probe_prefix}} team\",\n      \"handle\": \"{{probe_prefix}}team\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Patch Team",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams/{{team_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams",
+                "{{team_id}}"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Patch worked with a `data.fields` body on a disposable sandbox team. OAuth access tokens from `pbproof` were not accepted for the route family.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"description\": \"{{probe_prefix}} team updated\"\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Team",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url_v2}}/teams/{{team_id}}",
+              "host": [
+                "{{base_url_v2}}"
+              ],
+              "path": [
+                "teams",
+                "{{team_id}}"
+              ]
+            },
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Delete returned `204` and read-after-delete returned `404` for the sandbox team. OAuth access tokens from `pbproof` were not accepted for the route family."
+          }
+        }
+      ],
+      "description": "Jira integrations are live-proved with OAuth. Members and teams are live-proved with Productboard API-token auth; current OAuth bearer tokens still fail on those route families with `access.unknown_scope` despite the app carrying matching-looking scopes."
+    }
+  ]
+}
