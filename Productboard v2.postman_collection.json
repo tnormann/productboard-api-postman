@@ -43,7 +43,7 @@
                 "search"
               ]
             },
-            "description": "Live-verified. `POST /v2/entities/search` works with wrapped `{\"data\":{\"type\":\"...\"}}` and returns disjoint `feature` vs `subfeature` buckets on this tenant.",
+            "description": "Live-verified. `POST /v2/entities/search` works with wrapped `{\"data\":{\"type\":\"...\"}}` and returns disjoint `feature` vs `subfeature` buckets in tested workspaces.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"data\": {\n    \"type\": \"{{entity_type}}\"\n  }\n}"
@@ -75,7 +75,7 @@
                 }
               ]
             },
-            "description": "Live-verified. Use repeated or array-style `type[]` query params. Scalar `type=feature` returned `400 invalidJson` on the tested tenant."
+            "description": "Live-verified. Use repeated or array-style `type[]` query params. Scalar `type=feature` returned `400 invalidJson` on the tested workspace."
           }
         },
         {
@@ -154,7 +154,7 @@
                 "relationships"
               ]
             },
-            "description": "Live-proved on 2026-03-06 against a sandbox feature."
+            "description": "Live-proved on 2026-03-06 against a test feature."
           }
         },
         {
@@ -524,7 +524,7 @@
                 "parent"
               ]
             },
-            "description": "Live-proved on 2026-03-06. PUT succeeded with `data.target.id` when reasserting a valid component parent on a sandbox feature.",
+            "description": "Live-proved on 2026-03-06. PUT succeeded with `data.target.id` when reasserting a valid component parent on a test feature.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"data\": {\n    \"target\": {\n      \"id\": \"{{target_id}}\"\n    }\n  }\n}"
@@ -558,11 +558,11 @@
           }
         }
       ],
-      "description": "Configuration-first v2 entity workflow. Live proof on 2026-03-06 confirmed that `/v2/entities` accepts array-style query params (`type[]`, `fields[]`), scalar `type` fails, and child types such as component/feature/subfeature require a parent relationship at create time on this tenant."
+      "description": "Configuration-first v2 entity workflow. Live proof on 2026-03-06 confirmed that `/v2/entities` accepts array-style query params (`type[]`, `fields[]`), scalar `type` fails, and child types such as component/feature/subfeature require a parent relationship at create time in tested workspaces."
     },
     {
       "name": "Members",
-      "description": "Members routes are live-proved with Productboard API-token auth. The same routes returned `403 access.unknown_scope` when called with the `pbproof` OAuth access token.",
+      "description": "Members routes are live-proved with Productboard API-token auth. The same routes returned `403 access.unknown_scope` when called with the `oauth-test` OAuth access token.",
       "item": [
         {
           "name": "List Members",
@@ -583,7 +583,7 @@
                 "members"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` for `members:read`, so this route is currently API-token-verified rather than OAuth-verified."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` for `members:read`, so this route is currently API-token-verified rather than OAuth-verified."
           }
         },
         {
@@ -606,7 +606,7 @@
                 "{{member_id}}"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` earlier in the route family."
           }
         },
         {
@@ -630,14 +630,14 @@
                 "relationships"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` earlier in the route family."
           }
         }
       ]
     },
     {
       "name": "Analytics",
-      "description": "Analytics routes are separate from members. `member-activities` is live-proved with Productboard API-token auth; OAuth bearer tokens from `pbproof` returned `403 Missing required scope analytics:read`.",
+      "description": "Analytics routes are separate from members. `member-activities` is live-proved with Productboard API-token auth; OAuth bearer tokens from `oauth-test` returned `403 Missing required scope analytics:read`.",
       "item": [
         {
           "name": "List Member Activities",
@@ -665,7 +665,7 @@
                 }
               ]
             },
-            "description": "Live-proved with Productboard API-token auth on 2026-03-06. The documented route is `/v2/analytics/member-activities`, not `/v2/members/{id}/activity`. The same route returned `403 Missing required scope analytics:read` with the `pbproof` OAuth token."
+            "description": "Live-proved with Productboard API-token auth on 2026-03-06. The documented route is `/v2/analytics/member-activities`, not `/v2/members/{id}/activity`. The same route returned `403 Missing required scope analytics:read` with the `oauth-test` OAuth token."
           }
         }
       ]
@@ -1152,7 +1152,7 @@
                 }
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` for `teams:read`, so this route is currently API-token-verified rather than OAuth-verified."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` for `teams:read`, so this route is currently API-token-verified rather than OAuth-verified."
           }
         },
         {
@@ -1175,7 +1175,7 @@
                 "{{team_id}}"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` earlier in the route family."
           }
         },
         {
@@ -1199,7 +1199,7 @@
                 "relationships"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `pbproof` returned `403 access.unknown_scope` earlier in the route family."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. OAuth access tokens from `oauth-test` returned `403 access.unknown_scope` earlier in the route family."
           }
         },
         {
@@ -1225,7 +1225,7 @@
                 "teams"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. Minimal valid create body required `data.fields.name` and `data.fields.handle`. OAuth access tokens from `pbproof` were not accepted for the route family.",
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Minimal valid create body required `data.fields.name` and `data.fields.handle`. OAuth access tokens from `oauth-test` were not accepted for the route family.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"name\": \"{{probe_prefix}} team\",\n      \"handle\": \"{{probe_prefix}}team\"\n    }\n  }\n}"
@@ -1256,7 +1256,7 @@
                 "{{team_id}}"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. Patch worked with a `data.fields` body on a disposable sandbox team. OAuth access tokens from `pbproof` were not accepted for the route family.",
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Patch worked with a `data.fields` body on a disposable test team. OAuth access tokens from `oauth-test` were not accepted for the route family.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"data\": {\n    \"fields\": {\n      \"description\": \"{{probe_prefix}} team updated\"\n    }\n  }\n}"
@@ -1283,7 +1283,7 @@
                 "{{team_id}}"
               ]
             },
-            "description": "Live-proved with Productboard API token auth on 2026-03-06. Delete returned `204` and read-after-delete returned `404` for the sandbox team. OAuth access tokens from `pbproof` were not accepted for the route family."
+            "description": "Live-proved with Productboard API token auth on 2026-03-06. Delete returned `204` and read-after-delete returned `404` for the test team. OAuth access tokens from `oauth-test` were not accepted for the route family."
           }
         }
       ],
